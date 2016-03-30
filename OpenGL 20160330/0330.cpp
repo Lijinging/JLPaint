@@ -8,6 +8,9 @@ GLfloat red, green, blue;
 const int Width = 900;
 const int Height = 600;
 int points_size = 0;
+long long point_count = 0;
+int x_old = -1;
+int y_old = -1;
 
 vector<vector<int*>>points;
 typedef vector<int*> POINT;
@@ -19,6 +22,7 @@ void destroy()
 		points[i].clear();
 	points.clear();
 	points_size = 0;
+	point_count = 0;
 }
 
 void renderScene()
@@ -63,9 +67,15 @@ void init()
 
 void processMouseActiveMotion(int x, int y)
 {
-
+	if (x == x_old && y == y_old)
+	{
+//		cout << ".";
+		return;
+	}
 	points[points_size - 1].push_back(new int[2]{x, y});
-
+	x_old = x;
+	y_old = y;
+	point_count++;
 }
 
 void processNormalKeys(unsigned char key, int x, int y)
@@ -84,7 +94,15 @@ void processMouse(int button, int state, int x, int y)
 		point.push_back(new int[]{x, y});
 		points_size++;
 		points.push_back(point);
+		point_count++;
 	}
+	else
+		cout << "point_ount=" << point_count << endl;
+}
+
+void changeSize(int w, int h)
+{
+//	gluOrtho2D(0.0, w, h, 0.0);
 }
 
 int main(int argc, char** argv)
@@ -98,6 +116,8 @@ int main(int argc, char** argv)
 	init();
 	glutDisplayFunc(renderScene);
 	glutIdleFunc(renderScene);
+
+	glutReshapeFunc(changeSize);
 
 	//处理鼠标事件
 	glutMouseFunc(processMouse);

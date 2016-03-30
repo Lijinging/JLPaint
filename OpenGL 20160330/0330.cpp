@@ -30,15 +30,24 @@ void renderScene()
 		for (int j = 0; j < points_size; j++)
 		{
 			int point_size = points[j].size();
-			for (int i = 1; i < point_size; i++)
+			if (point_size==1)
 			{
-				glBegin(GL_LINES);
-				{
-					glVertex2i(points[j][i][0], points[j][i][1]);
-					glVertex2i(points[j][i - 1][0], points[j][i - 1][1]);
-
-				}
+				glBegin(GL_POINTS);
+				glVertex2i(points[j][0][0], points[j][0][1]);
 				glEnd();
+			}
+			else
+			{
+				for (int i = 1; i < point_size; i++)
+				{
+					glBegin(GL_LINES);
+					{
+						glVertex2i(points[j][i][0], points[j][i][1]);
+						glVertex2i(points[j][i - 1][0], points[j][i - 1][1]);
+
+					}
+					glEnd();
+				}
 			}
 		}
 	}
